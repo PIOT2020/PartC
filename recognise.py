@@ -16,6 +16,13 @@ import imutils
 import pickle
 import time
 import cv2
+import socket_utils
+import socket, json, sqlite3, sys
+
+HOST = "127.0.0.1"         # The server's hostname or IP address.
+PORT = 63000               # The port used by the server.
+ADDRESS = (HOST, PORT)
+carid = 1
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -89,6 +96,24 @@ while True:
         print("Person found: {}".format(name))
         # Set a flag to sleep the cam for fixed time
         time.sleep(3.0)
+
+        user = { "username": name, "password": "none", "carid": carid}
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect(ADDRESS)
+            socket_utils.sendJson(s, user)
+            while(True):
+                object = socket_utils.recvJson(s)
+                if("authenticated" in object):
+                    print("Welcome")
+                    print()
+                    break
+                else:
+                    print("No Booking for this user found")
+                    print()
+                    break
+
+
+
 
 # do a bit of cleanup
 vs.stop()
