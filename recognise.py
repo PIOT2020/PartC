@@ -97,15 +97,18 @@ while True:
         # Set a flag to sleep the cam for fixed time
         time.sleep(3.0)
 
-        user = { "username": name, "password": "none", "carid": carid}
+        user = { "username": name, "password": "none", "carid": carid, "finish": 0}
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect(ADDRESS)
             socket_utils.sendJson(s, user)
             while(True):
                 object = socket_utils.recvJson(s)
                 if("authenticated" in object):
-                    print("Welcome")
+                    print("Car Unlocked")
                     print()
+                    input("Press Enter to return vehicle...")
+                    user["finish"] = 1
+                    socket_utils.sendJson(s, user)
                     break
                 else:
                     print("No Booking for this user found")
