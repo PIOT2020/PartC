@@ -26,6 +26,10 @@ ADDRESS = (HOST, PORT)
 carid = 16
 
 def main():
+    """
+ - Scans the photos in encodings.pickle which have been encoded by encode.py
+ - Authenticates the photo
+ - Depending on if the photo us a user that exists or not either 'username' will be displayed or 'Unknown'"""
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-e", "--encodings", default="encodings.pickle",
@@ -104,6 +108,7 @@ def main():
             vs.stop()
 
 def login(user):
+    """This is a copy of agent.py's code which allows the user to be authenticated, log in and either unlock or return their car"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         print("Connecting to {}...".format(ADDRESS))
         s.connect(ADDRESS)

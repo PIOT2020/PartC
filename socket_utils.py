@@ -3,6 +3,7 @@
 import socket, json, struct
 
 def sendJson(socket, object):
+    """Send Json Socket"""
     jsonString = json.dumps(object)
     data = jsonString.encode("utf-8")
     jsonLength = struct.pack("!i", len(data))
@@ -10,6 +11,7 @@ def sendJson(socket, object):
     socket.sendall(data)
 
 def recvJson(socket):
+    """Receives Json Socket"""
     buffer = socket.recv(4)
     jsonLength = struct.unpack("!i", buffer)[0]
 
